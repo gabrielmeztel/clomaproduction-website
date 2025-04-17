@@ -46,15 +46,44 @@ export function setupAuth(app: Express) {
   app.use(passport.session());
 
   passport.use(
-    new LocalStrategy(async (username, password, done) => {
+    new LocalStrategy({ usernameField: 'username' }, async (username, password, done) => {
       try {
-        const user = await storage.getUserByUsername(username);
+        // Try to find user by username first
+        let user = await storage.getUserByUsername(username);
+        
+        // If not found by username, check if the username field contains an email
+        if (!user && username.includes('@')) {
+          // Get all users and find one by email
+          const allUsers = await storage.getAllUsers();
+          user = allUsers.find(u => u.email === username);
+        }
+        
+        // Check admin hardcoded credentials specifically
+        if (username === 'Gabrielezigbo13@gmail.com' && password === 'chuchu2007////') {
+          // Check if admin user already exists
+          const adminUser = await storage.getUserByEmail('Gabrielezigbo13@gmail.com');
+          
+          if (adminUser) {
+            return done(null, adminUser);
+          } else {
+            // Create a admin user if it doesn't exist
+            const newAdmin = await storage.createUser({
+              username: 'adminCloma',
+              email: 'Gabrielezigbo13@gmail.com',
+              password: await hashPassword('chuchu2007////'),
+              isAdmin: true
+            });
+            return done(null, newAdmin);
+          }
+        }
+        
         if (!user || !(await comparePasswords(password, user.password))) {
           return done(null, false);
         } else {
           return done(null, user);
         }
       } catch (error) {
+        console.error("Authentication error:", error);
         return done(error);
       }
     }),
@@ -72,7 +101,7 @@ export function setupAuth(app: Express) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
-      const { username, password, isAdmin = false } = req.body;
+      const { username, email, password, isAdmin = false } = req.body;
 
       if (!username || !password) {
         return res.status(400).json({ message: "Username and password are required" });
@@ -82,14 +111,23 @@ export function setupAuth(app: Express) {
       if (existingUser) {
         return res.status(400).json({ message: "Username already exists" });
       }
+      
+      // Check if email exists if provided
+      if (email) {
+        const emailUser = await storage.getUserByEmail(email);
+        if (emailUser) {
+          return res.status(400).json({ message: "Email already exists" });
+        }
+      }
 
       const user = await storage.createUser({
         username,
+        email,
         password: await hashPassword(password),
         isAdmin,
       });
 
-      req.login(user, (err) => {
+      req.login(user, (err: Error | null) => {
         if (err) return next(err);
         res.status(201).json(user);
       });
@@ -100,11 +138,11 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate("local", (err: Error | null, user: User | false, info: any) => {
       if (err) return next(err);
       if (!user) return res.status(401).json({ message: "Invalid username or password" });
       
-      req.login(user, (err) => {
+      req.login(user, (err: Error | null) => {
         if (err) return next(err);
         return res.status(200).json(user);
       });
