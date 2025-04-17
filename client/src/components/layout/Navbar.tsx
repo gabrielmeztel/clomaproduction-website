@@ -57,7 +57,7 @@ const Navbar = () => {
                 onClick={() => navigate("/auth")}
                 className="bg-primary hover:bg-primary/90 text-white"
               >
-                Admin Login
+                Sign In
               </Button>
             )}
           </div>
@@ -118,7 +118,7 @@ const Navbar = () => {
                     ) : (
                       <MobileNavLink 
                         href="/auth"
-                        label="Admin Login"
+                        label="Sign In"
                         onClick={() => setIsMenuOpen(false)}
                       />
                     )}

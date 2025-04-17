@@ -30,6 +30,7 @@ const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(6, "Confirm password must be at least 6 characters"),
+  adminKey: z.string().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -54,6 +55,7 @@ export default function AuthPage() {
       username: "",
       password: "",
       confirmPassword: "",
+      adminKey: "",
     },
   });
 
@@ -73,8 +75,15 @@ export default function AuthPage() {
   };
 
   const onRegisterSubmit = (values: z.infer<typeof registerSchema>) => {
-    const { username, password } = values;
-    registerMutation.mutate({ username, password, isAdmin: true });
+    const { username, password, adminKey } = values;
+    
+    // The specific admin key that only administrators would know
+    const ADMIN_PASSCODE = "cloma2024";
+    
+    // Check if the admin key is provided and matches our secret key
+    const isAdmin = adminKey === ADMIN_PASSCODE;
+    
+    registerMutation.mutate({ username, password, isAdmin });
   };
 
   return (
@@ -206,6 +215,20 @@ export default function AuthPage() {
                                 <FormLabel>Confirm Password</FormLabel>
                                 <FormControl>
                                   <Input type="password" placeholder="Confirm your password" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={registerForm.control}
+                            name="adminKey"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Admin Passcode</FormLabel>
+                                <FormControl>
+                                  <Input type="password" placeholder="Enter the admin passcode" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
