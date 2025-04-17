@@ -29,17 +29,14 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function setupAuth(app: Express) {
-  const sessionSecret = process.env.SESSION_SECRET || "event-connect-secret-key";
-  
   const sessionSettings: session.SessionOptions = {
-    secret: sessionSecret,
+    secret: process.env.SESSION_SECRET || "eventhub-session-secret",
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production"
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     }
   };
 
@@ -75,39 +72,41 @@ export function setupAuth(app: Express) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
-      const existingUser = await storage.getUserByUsername(req.body.username);
+      const { username, password, isAdmin = false } = req.body;
+
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required" });
+      }
+
+      const existingUser = await storage.getUserByUsername(username);
       if (existingUser) {
         return res.status(400).json({ message: "Username already exists" });
       }
 
       const user = await storage.createUser({
-        ...req.body,
-        password: await hashPassword(req.body.password),
+        username,
+        password: await hashPassword(password),
+        isAdmin,
       });
 
       req.login(user, (err) => {
         if (err) return next(err);
-        
-        // Don't send the password back to the client
-        const { password, ...userWithoutPassword } = user;
-        res.status(201).json(userWithoutPassword);
+        res.status(201).json(user);
       });
     } catch (error) {
-      next(error);
+      console.error("Registration error:", error);
+      res.status(500).json({ message: "Failed to register user" });
     }
   });
 
   app.post("/api/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
       if (err) return next(err);
-      if (!user) return res.status(401).json({ message: "Invalid credentials" });
+      if (!user) return res.status(401).json({ message: "Invalid username or password" });
       
       req.login(user, (err) => {
         if (err) return next(err);
-        
-        // Don't send the password back to the client
-        const { password, ...userWithoutPassword } = user;
-        res.status(200).json(userWithoutPassword);
+        return res.status(200).json(user);
       });
     })(req, res, next);
   });
@@ -121,22 +120,6 @@ export function setupAuth(app: Express) {
 
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
-    
-    // Don't send the password back to the client
-    const { password, ...userWithoutPassword } = req.user;
-    res.json(userWithoutPassword);
-  });
-
-  // Create an admin check middleware
-  app.use("/api/admin/*", (req, res, next) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
-    
-    if (!req.user.isAdmin) {
-      return res.status(403).json({ message: "Forbidden - Admin access required" });
-    }
-    
-    next();
+    res.json(req.user);
   });
 }

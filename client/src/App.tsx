@@ -2,34 +2,29 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
-import BlogPage from "@/pages/blog/index";
-import BlogPostPage from "@/pages/blog/post";
-import GalleryPage from "@/pages/gallery";
+import BlogPage from "@/pages/blog-page";
+import GalleryPage from "@/pages/gallery-page";
 import AdminDashboard from "@/pages/admin/dashboard";
-import AdminBlogPosts from "@/pages/admin/blog-posts";
-import AdminGallery from "@/pages/admin/gallery";
-import AdminChatSettings from "@/pages/admin/chat-settings";
+import AdminBlogManagement from "@/pages/admin/blog-management";
+import AdminGalleryManagement from "@/pages/admin/gallery-management";
 import { ProtectedRoute } from "./lib/protected-route";
-import { ChatWidget } from "@/components/ui/chat-widget";
 
 function Router() {
   return (
     <Switch>
-      {/* Public Routes */}
       <Route path="/" component={HomePage} />
       <Route path="/auth" component={AuthPage} />
-      <Route path="/blog" component={BlogPage} />
-      <Route path="/blog/:id" component={BlogPostPage} />
+      <Route path="/blogs" component={BlogPage} />
       <Route path="/gallery" component={GalleryPage} />
       
-      {/* Admin Routes (Protected) */}
+      {/* Admin routes - protected */}
       <ProtectedRoute path="/admin" component={AdminDashboard} />
-      <ProtectedRoute path="/admin/blog" component={AdminBlogPosts} />
-      <ProtectedRoute path="/admin/gallery" component={AdminGallery} />
-      <ProtectedRoute path="/admin/chat-settings" component={AdminChatSettings} />
+      <ProtectedRoute path="/admin/blogs" component={AdminBlogManagement} />
+      <ProtectedRoute path="/admin/gallery" component={AdminGalleryManagement} />
       
       {/* Fallback to 404 */}
       <Route component={NotFound} />
@@ -40,9 +35,10 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
-      <ChatWidget />
-      <Toaster />
+      <AuthProvider>
+        <Router />
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

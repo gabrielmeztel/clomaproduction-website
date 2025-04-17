@@ -1,94 +1,105 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
-import { setupAuth } from "./auth";
 import { storage } from "./storage";
-import { insertBlogPostSchema, insertGalleryImageSchema, insertChatSettingsSchema } from "@shared/schema";
-import { getChatResponse } from "./openai";
-import { randomUUID } from "crypto";
+import { setupAuth } from "./auth";
+import { generateAIResponse, generateBlogIdeas } from "./openai";
+import { z } from "zod";
+import { insertBlogPostSchema, insertGalleryImageSchema, insertChatMessageSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Setup authentication routes (/api/register, /api/login, /api/logout, /api/user)
+  // Set up authentication routes
   setupAuth(app);
 
   // Blog routes
-  app.get("/api/blog", async (req, res) => {
+  app.get("/api/blogs", async (req, res) => {
     try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-      const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
-      
-      const posts = await storage.getPublishedBlogPosts(limit, offset);
-      res.json(posts);
+      const blogs = await storage.getBlogPosts();
+      // Filter out drafts for non-admin users
+      if (!req.isAuthenticated() || !req.user.isAdmin) {
+        return res.json(blogs.filter(blog => !blog.isDraft));
+      }
+      return res.json(blogs);
     } catch (error) {
+      console.error("Error fetching blogs:", error);
       res.status(500).json({ message: "Failed to fetch blog posts" });
     }
   });
 
-  app.get("/api/blog/:id", async (req, res) => {
+  app.get("/api/blogs/:id", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const post = await storage.getBlogPost(id);
-      
-      if (!post) {
+      const blog = await storage.getBlogPost(Number(req.params.id));
+      if (!blog) {
         return res.status(404).json({ message: "Blog post not found" });
       }
-      
-      res.json(post);
+      // Prevent non-admin users from viewing drafts
+      if (blog.isDraft && (!req.isAuthenticated() || !req.user.isAdmin)) {
+        return res.status(403).json({ message: "You don't have permission to view this draft" });
+      }
+      res.json(blog);
     } catch (error) {
+      console.error("Error fetching blog:", error);
       res.status(500).json({ message: "Failed to fetch blog post" });
     }
   });
 
-  // Admin blog routes
-  app.get("/api/admin/blog", async (req, res) => {
-    try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-      const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
-      
-      const posts = await storage.getBlogPosts(limit, offset);
-      res.json(posts);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch blog posts" });
+  app.post("/api/blogs", async (req, res) => {
+    if (!req.isAuthenticated() || !req.user.isAdmin) {
+      return res.status(403).json({ message: "Unauthorized" });
     }
-  });
 
-  app.post("/api/admin/blog", async (req, res) => {
     try {
       const validatedData = insertBlogPostSchema.parse(req.body);
-      const newPost = await storage.createBlogPost(validatedData);
-      res.status(201).json(newPost);
+      const blog = await storage.createBlogPost(validatedData);
+      res.status(201).json(blog);
     } catch (error) {
-      res.status(400).json({ message: "Invalid blog post data", error });
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid blog post data", errors: error.errors });
+      }
+      console.error("Error creating blog:", error);
+      res.status(500).json({ message: "Failed to create blog post" });
     }
   });
 
-  app.patch("/api/admin/blog/:id", async (req, res) => {
+  app.put("/api/blogs/:id", async (req, res) => {
+    if (!req.isAuthenticated() || !req.user.isAdmin) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
     try {
-      const id = parseInt(req.params.id);
+      const blogId = Number(req.params.id);
       const validatedData = insertBlogPostSchema.partial().parse(req.body);
+      const updatedBlog = await storage.updateBlogPost(blogId, validatedData);
       
-      const updatedPost = await storage.updateBlogPost(id, validatedData);
-      
-      if (!updatedPost) {
+      if (!updatedBlog) {
         return res.status(404).json({ message: "Blog post not found" });
       }
       
-      res.json(updatedPost);
+      res.json(updatedBlog);
     } catch (error) {
-      res.status(400).json({ message: "Invalid blog post data", error });
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid blog post data", errors: error.errors });
+      }
+      console.error("Error updating blog:", error);
+      res.status(500).json({ message: "Failed to update blog post" });
     }
   });
 
-  app.delete("/api/admin/blog/:id", async (req, res) => {
+  app.delete("/api/blogs/:id", async (req, res) => {
+    if (!req.isAuthenticated() || !req.user.isAdmin) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
     try {
-      const id = parseInt(req.params.id);
-      const success = await storage.deleteBlogPost(id);
+      const blogId = Number(req.params.id);
+      const success = await storage.deleteBlogPost(blogId);
       
       if (!success) {
         return res.status(404).json({ message: "Blog post not found" });
       }
       
-      res.status(204).send();
+      res.status(204).end();
     } catch (error) {
+      console.error("Error deleting blog:", error);
       res.status(500).json({ message: "Failed to delete blog post" });
     }
   });
@@ -96,133 +107,147 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Gallery routes
   app.get("/api/gallery", async (req, res) => {
     try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 20;
-      const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
-      
-      const images = await storage.getGalleryImages(limit, offset);
+      const images = await storage.getGalleryImages();
       res.json(images);
     } catch (error) {
+      console.error("Error fetching gallery images:", error);
       res.status(500).json({ message: "Failed to fetch gallery images" });
     }
   });
 
-  // Admin gallery routes
-  app.post("/api/admin/gallery", async (req, res) => {
+  app.get("/api/gallery/:id", async (req, res) => {
     try {
-      const validatedData = insertGalleryImageSchema.parse(req.body);
-      const newImage = await storage.createGalleryImage(validatedData);
-      res.status(201).json(newImage);
+      const image = await storage.getGalleryImage(Number(req.params.id));
+      if (!image) {
+        return res.status(404).json({ message: "Image not found" });
+      }
+      res.json(image);
     } catch (error) {
-      res.status(400).json({ message: "Invalid gallery image data", error });
+      console.error("Error fetching image:", error);
+      res.status(500).json({ message: "Failed to fetch image" });
     }
   });
 
-  app.patch("/api/admin/gallery/:id", async (req, res) => {
+  app.post("/api/gallery", async (req, res) => {
+    if (!req.isAuthenticated() || !req.user.isAdmin) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
     try {
-      const id = parseInt(req.params.id);
+      const validatedData = insertGalleryImageSchema.parse(req.body);
+      const image = await storage.createGalleryImage(validatedData);
+      res.status(201).json(image);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid image data", errors: error.errors });
+      }
+      console.error("Error creating image:", error);
+      res.status(500).json({ message: "Failed to create image" });
+    }
+  });
+
+  app.put("/api/gallery/:id", async (req, res) => {
+    if (!req.isAuthenticated() || !req.user.isAdmin) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    try {
+      const imageId = Number(req.params.id);
       const validatedData = insertGalleryImageSchema.partial().parse(req.body);
-      
-      const updatedImage = await storage.updateGalleryImage(id, validatedData);
+      const updatedImage = await storage.updateGalleryImage(imageId, validatedData);
       
       if (!updatedImage) {
-        return res.status(404).json({ message: "Gallery image not found" });
+        return res.status(404).json({ message: "Image not found" });
       }
       
       res.json(updatedImage);
     } catch (error) {
-      res.status(400).json({ message: "Invalid gallery image data", error });
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid image data", errors: error.errors });
+      }
+      console.error("Error updating image:", error);
+      res.status(500).json({ message: "Failed to update image" });
     }
   });
 
-  app.delete("/api/admin/gallery/:id", async (req, res) => {
+  app.delete("/api/gallery/:id", async (req, res) => {
+    if (!req.isAuthenticated() || !req.user.isAdmin) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
     try {
-      const id = parseInt(req.params.id);
-      const success = await storage.deleteGalleryImage(id);
+      const imageId = Number(req.params.id);
+      const success = await storage.deleteGalleryImage(imageId);
       
       if (!success) {
-        return res.status(404).json({ message: "Gallery image not found" });
+        return res.status(404).json({ message: "Image not found" });
       }
       
-      res.status(204).send();
+      res.status(204).end();
     } catch (error) {
-      res.status(500).json({ message: "Failed to delete gallery image" });
+      console.error("Error deleting image:", error);
+      res.status(500).json({ message: "Failed to delete image" });
     }
   });
 
-  // Chat endpoints
+  // Chat routes
   app.post("/api/chat", async (req, res) => {
     try {
-      const { message } = req.body;
+      const { userId, message } = req.body;
       
-      if (!message || typeof message !== 'string') {
-        return res.status(400).json({ message: "Message is required" });
+      if (!userId || !message) {
+        return res.status(400).json({ message: "userId and message are required" });
       }
       
-      // Generate or use existing session ID for the user
-      let userId = req.session.chatUserId;
-      if (!userId) {
-        userId = randomUUID();
-        req.session.chatUserId = userId;
+      // Generate AI response
+      const aiResponse = await generateAIResponse(message);
+      
+      // Store the message and response
+      const chatMessage = await storage.createChatMessage({
+        userId,
+        message,
+        aiResponse,
+      });
+      
+      res.status(201).json({
+        id: chatMessage.id,
+        aiResponse: chatMessage.aiResponse,
+      });
+    } catch (error) {
+      console.error("Error handling chat message:", error);
+      res.status(500).json({ message: "Failed to process chat message" });
+    }
+  });
+
+  app.get("/api/chat/:userId", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const messages = await storage.getChatMessages(userId);
+      res.json(messages);
+    } catch (error) {
+      console.error("Error fetching chat messages:", error);
+      res.status(500).json({ message: "Failed to fetch chat messages" });
+    }
+  });
+
+  // Blog ideas generation endpoint
+  app.post("/api/generate-blog-ideas", async (req, res) => {
+    if (!req.isAuthenticated() || !req.user.isAdmin) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    try {
+      const { topic } = req.body;
+      
+      if (!topic) {
+        return res.status(400).json({ message: "Topic is required" });
       }
       
-      const response = await getChatResponse(userId, message);
-      res.json({ message: response });
+      const ideas = await generateBlogIdeas(topic);
+      res.json({ ideas });
     } catch (error) {
-      res.status(500).json({ message: "Failed to process chat request" });
-    }
-  });
-
-  // Admin chat settings
-  app.get("/api/admin/chat-settings", async (req, res) => {
-    try {
-      const settings = await storage.getChatSettings();
-      res.json(settings);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch chat settings" });
-    }
-  });
-
-  app.patch("/api/admin/chat-settings", async (req, res) => {
-    try {
-      const validatedData = insertChatSettingsSchema.parse(req.body);
-      const updatedSettings = await storage.updateChatSettings(validatedData);
-      res.json(updatedSettings);
-    } catch (error) {
-      res.status(400).json({ message: "Invalid chat settings data", error });
-    }
-  });
-
-  // Dashboard stats route for admin
-  app.get("/api/admin/stats", async (req, res) => {
-    try {
-      const blogPosts = await storage.getBlogPosts();
-      const galleryImages = await storage.getGalleryImages();
-      
-      // This is a simple implementation for the MVP
-      // In a real application, we'd track more metrics
-      const stats = {
-        totalBlogPosts: blogPosts.length,
-        publishedBlogPosts: blogPosts.filter(post => post.status === 'published').length,
-        draftBlogPosts: blogPosts.filter(post => post.status === 'draft').length,
-        totalGalleryImages: galleryImages.length,
-        recentActivity: blogPosts
-          .concat(galleryImages as any)
-          .sort((a, b) => 
-            (b.updatedAt || b.createdAt).getTime() - 
-            (a.updatedAt || a.createdAt).getTime()
-          )
-          .slice(0, 5)
-          .map(item => ({
-            type: 'imageUrl' in item ? 'gallery' : 'blog',
-            id: item.id,
-            title: item.title,
-            date: item.updatedAt || item.createdAt
-          }))
-      };
-      
-      res.json(stats);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch admin stats" });
+      console.error("Error generating blog ideas:", error);
+      res.status(500).json({ message: "Failed to generate blog ideas" });
     }
   });
 
