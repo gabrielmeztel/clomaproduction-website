@@ -22,26 +22,30 @@ const Footer = () => {
             </div>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Resources</h3>
+            <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Quick Links</h3>
             <ul className="mt-4 space-y-4">
-              <FooterLink href="/blogs" label="Blog" />
-              <FooterLink href="/gallery" label="Gallery" />
-              <FooterLink href="#" label="Events" />
-              <FooterLink href="#" label="Success Stories" />
+              <FooterLink href="/" label="Home" />
+              <FooterLink href="/about" label="About" />
+              <FooterLink href="/works" label="Works" />
+              <FooterLink href="/fundraiser" label="Fundraiser" />
+              <FooterLink href="/careers" label="Careers" />
+              <FooterLink href="/contact" label="Contact" />
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Company</h3>
+            <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Contact Us</h3>
             <ul className="mt-4 space-y-4">
-              <FooterLink href="#" label="About" />
-              <FooterLink href="#" label="Contact" />
-              <FooterLink href="#" label="Privacy Policy" />
-              <FooterLink href="#" label="Terms of Service" />
+              <li className="text-base text-gray-300">
+                Email: <a href="mailto:clomaprodution@gmail.com" className="hover:text-white">clomaprodution@gmail.com</a>
+              </li>
+              <li className="text-base text-gray-300">
+                Phone: +2349129426172
+              </li>
             </ul>
           </div>
         </div>
         <div className="mt-8 border-t border-gray-700 pt-8">
-          <p className="text-base text-gray-400 text-center">&copy; {new Date().getFullYear()} EventConnect. All rights reserved.</p>
+          <p className="text-base text-gray-400 text-center">&copy; {new Date().getFullYear()} Cloma Production. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -49,11 +49,11 @@ export default function HomePage() {
                   <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
                     <div>
                       <h1 className="mt-4 text-4xl tracking-tight font-bold text-gray-900 sm:mt-5 sm:text-5xl lg:mt-6 xl:text-5xl font-heading">
-                        <span className="block">Connect with people who</span>
-                        <span className="block text-primary">share your interests</span>
+                        <span className="block">Bringing Stories</span>
+                        <span className="block text-primary">to Life</span>
                       </h1>
                       <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                        EventConnect helps event attendees discover and connect with others who share their passions and interests, creating meaningful relationships that last beyond the event.
+                        An online-based animation studio with artists from all over the world creating bold, heartfelt stories through the art of animation.
                       </p>
                       <div className="mt-8 sm:mt-10">
                         <form className="sm:flex" onSubmit={handleSubscribe}>
@@ -87,44 +87,81 @@ export default function HomePage() {
         <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
           <img 
             className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" 
-            src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
-            alt="People networking at an event" 
+            src="/attached_assets/hero-bg.jpg" 
+            alt="Cloma Production Animated Character" 
           />
         </div>
       </div>
       
-      {/* Features Section */}
-      <div className="py-12 bg-white">
+      {/* Services Section */}
+      <div className="py-12 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
-            <h2 className="text-base text-primary font-semibold tracking-wide uppercase">Features</h2>
-            <p className="mt-2 text-3xl leading-8 font-bold tracking-tight text-gray-900 sm:text-4xl font-heading">A better way to connect at events</p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">Discover how EventConnect makes networking at events easier and more meaningful.</p>
+            <h2 className="text-base text-primary font-semibold tracking-wide uppercase">Our Services</h2>
+            <p className="mt-2 text-3xl leading-8 font-bold tracking-tight text-white sm:text-4xl font-heading">Animation Services We Offer</p>
+            <p className="mt-4 max-w-2xl text-xl text-gray-400 lg:mx-auto">Professional animation services for projects of all sizes, from concept to final delivery.</p>
           </div>
 
           <div className="mt-10">
             <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
               <Feature
-                icon={<i className="fas fa-users"></i>}
-                title="Interest Matching"
-                description="Connect with attendees who share your professional interests, hobbies, or goals."
+                icon={<i className="fas fa-video"></i>}
+                title="2D Animation"
+                description="Creative 2D animation services for commercials, explainer videos, and social media content."
               />
               <Feature
-                icon={<i className="fas fa-calendar-alt"></i>}
-                title="Event Discovery"
-                description="Find events where you're most likely to meet people with shared interests."
+                icon={<i className="fas fa-cube"></i>}
+                title="Character Design"
+                description="Custom character designs that bring your story to life with personality and style."
               />
               <Feature
-                icon={<i className="fas fa-comments"></i>}
-                title="AI Chat Assistant"
-                description="Get answers to your questions instantly with our AI-powered chat widget."
+                icon={<i className="fas fa-pencil-alt"></i>}
+                title="Storyboarding"
+                description="Detailed storyboards to visualize your narrative and plan your production effectively."
               />
               <Feature
-                icon={<i className="fas fa-newspaper"></i>}
-                title="Industry Blog"
-                description="Stay updated with the latest trends, tips, and success stories."
+                icon={<i className="fas fa-paint-brush"></i>}
+                title="Visual Development"
+                description="Background art and scene design to establish the perfect mood and setting for your story."
               />
             </dl>
+          </div>
+        </div>
+      </div>
+      
+      {/* Partners Section */}
+      <div className="py-12 bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl font-heading">Our Partners</h2>
+            <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-300 sm:mt-4">
+              We collaborate with leading studios and creators in the animation industry.
+            </p>
+          </div>
+
+          <div className="mt-12 max-w-xl mx-auto">
+            <div className="bg-gray-900 rounded-lg shadow-xl overflow-hidden p-8">
+              <div className="flex flex-col sm:flex-row items-center gap-8">
+                <div className="flex-shrink-0">
+                  <img 
+                    src="/attached_assets/partner-logo.jpg" 
+                    alt="AC Comic Studios Logo" 
+                    className="h-32 w-32 object-cover rounded-full"
+                  />
+                </div>
+                <div className="flex-1 text-center sm:text-left">
+                  <h3 className="text-2xl font-bold text-white">AC Comic Studios</h3>
+                  <p className="mt-2 text-gray-300">
+                    Working together to create compelling animated stories and characters that resonate with audiences worldwide.
+                  </p>
+                  <div className="mt-4">
+                    <Button className="bg-primary hover:bg-primary/90 text-white">
+                      Visit Partner
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -135,7 +172,7 @@ export default function HomePage() {
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-heading">Latest Blog Posts</h2>
             <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-              Discover the latest insights, tips, and success stories.
+              Discover the latest insights, tips, and stories from our animation studio.
             </p>
           </div>
 
@@ -161,32 +198,44 @@ export default function HomePage() {
         </div>
       </div>
       
-      {/* Gallery Section */}
-      <div className="py-12 bg-white">
+      {/* Projects Section */}
+      <div className="py-12 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-heading">Event Gallery</h2>
-            <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-              See what happens at our events and get inspired to join the next one.
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl font-heading">Our Animation Projects</h2>
+            <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-400 sm:mt-4">
+              Check out some of our recent animation work and creative collaborations.
             </p>
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {imagesLoading ? (
-              <div className="col-span-3 text-center py-10">Loading gallery images...</div>
-            ) : images && images.length > 0 ? (
-              images.slice(0, 6).map((image) => (
-                <GalleryItem key={image.id} image={image} />
-              ))
-            ) : (
-              <div className="col-span-3 text-center py-10">No gallery images available.</div>
-            )}
+            <div className="overflow-hidden rounded-lg shadow-lg">
+              <img 
+                src="/attached_assets/project1.jpg" 
+                alt="Animation Project 1"
+                className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
+              />
+            </div>
+            <div className="overflow-hidden rounded-lg shadow-lg">
+              <img 
+                src="/attached_assets/project2.jpg" 
+                alt="Animation Project 2"
+                className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
+              />
+            </div>
+            <div className="overflow-hidden rounded-lg shadow-lg">
+              <img 
+                src="/attached_assets/studio.jpg" 
+                alt="Animation Project 3"
+                className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
+              />
+            </div>
           </div>
 
           <div className="mt-10 text-center">
-            <Link href="/gallery">
+            <Link href="/works">
               <Button className="bg-primary hover:bg-primary/90 text-white">
-                View Full Gallery
+                View All Projects
               </Button>
             </Link>
           </div>
@@ -215,9 +264,9 @@ const Feature = ({
         <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
           {icon}
         </div>
-        <p className="ml-16 text-lg leading-6 font-medium text-gray-900">{title}</p>
+        <p className="ml-16 text-lg leading-6 font-medium text-white">{title}</p>
       </dt>
-      <dd className="mt-2 ml-16 text-base text-gray-500">{description}</dd>
+      <dd className="mt-2 ml-16 text-base text-gray-400">{description}</dd>
     </div>
   );
 };
@@ -236,15 +285,13 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
       <div className="flex-1 bg-white p-6 flex flex-col justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-primary">
-            <Link href={`/blogs?category=${post.category}`}>
-              <a className="hover:underline">{post.category}</a>
+            <Link href={`/blogs?category=${post.category}`} className="hover:underline">
+              {post.category}
             </Link>
           </p>
-          <Link href={`/blogs/${post.id}`}>
-            <a className="block mt-2">
-              <p className="text-xl font-semibold text-gray-900">{post.title}</p>
-              <div className="mt-3 text-base text-gray-500" dangerouslySetInnerHTML={{ __html: post.content.slice(0, 150) + '...' }} />
-            </a>
+          <Link href={`/blogs/${post.id}`} className="block mt-2">
+            <p className="text-xl font-semibold text-gray-900">{post.title}</p>
+            <div className="mt-3 text-base text-gray-500" dangerouslySetInnerHTML={{ __html: post.content.slice(0, 150) + '...' }} />
           </Link>
         </div>
         <div className="mt-6 flex items-center">
