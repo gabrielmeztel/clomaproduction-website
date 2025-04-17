@@ -48,11 +48,11 @@ export default function HomePage() {
                 <div className="lg:grid lg:grid-cols-2 lg:gap-8">
                   <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
                     <div>
-                      <h1 className="mt-4 text-4xl tracking-tight font-bold text-gray-900 sm:mt-5 sm:text-5xl lg:mt-6 xl:text-5xl font-heading">
+                      <h1 className="mt-4 text-4xl tracking-tight font-bold text-white sm:mt-5 sm:text-5xl lg:mt-6 xl:text-5xl font-heading">
                         <span className="block">Bringing Stories</span>
                         <span className="block text-primary">to Life</span>
                       </h1>
-                      <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                      <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                         An online-based animation studio with artists from all over the world creating bold, heartfelt stories through the art of animation.
                       </p>
                       <div className="mt-8 sm:mt-10">
@@ -85,6 +85,34 @@ export default function HomePage() {
           </div>
         </div>
         {/* Removing the duplicate hero image */}
+      </div>
+      
+      {/* Featured Animation */}
+      <div className="py-12 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:text-center mb-6">
+            <h2 className="text-base text-primary font-semibold tracking-wide uppercase">Featured Animation</h2>
+            <p className="mt-2 text-3xl leading-8 font-bold tracking-tight text-white sm:text-4xl font-heading">Our Latest Work</p>
+            <p className="mt-4 max-w-2xl text-xl text-gray-400 lg:mx-auto">Experience the quality and creativity of our animation production.</p>
+          </div>
+          
+          <div className="mt-8 flex justify-center">
+            <div className="relative w-full max-w-4xl overflow-hidden rounded-xl shadow-2xl">
+              <VideoPlayer 
+                src="@assets/gop_002.mp4"
+                className="w-full h-auto"
+                autoPlay={true}
+                loop={true}
+                muted={true}
+                controls={false}
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                <h3 className="text-xl font-bold text-white">GOP Animation Preview</h3>
+                <p className="mt-2 text-gray-300">A sample of our animation style and quality.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       
       {/* Services Section */}
@@ -155,7 +183,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row items-center gap-8">
                 <div className="flex-shrink-0">
                   <img 
-                    src="/attached_assets/partner-logo.jpg" 
+                    src="@assets/partner-logo.jpg" 
                     alt="AC Comic Studios Logo" 
                     className="h-32 w-32 object-cover rounded-full"
                   />
@@ -222,21 +250,21 @@ export default function HomePage() {
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div className="overflow-hidden rounded-lg shadow-lg">
               <img 
-                src="/attached_assets/project1.jpg" 
+                src="@assets/project1.jpg" 
                 alt="Animation Project 1"
                 className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
               />
             </div>
             <div className="overflow-hidden rounded-lg shadow-lg">
               <img 
-                src="/attached_assets/project2.jpg" 
+                src="@assets/project2.jpg" 
                 alt="Animation Project 2"
                 className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
               />
             </div>
             <div className="overflow-hidden rounded-lg shadow-lg">
               <img 
-                src="/attached_assets/studio.jpg" 
+                src="@assets/studio.jpg" 
                 alt="Animation Project 3"
                 className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
               />
