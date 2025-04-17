@@ -22,7 +22,7 @@ const Navbar = () => {
             <div className="flex-shrink-0 flex items-center">
               <Link href="/">
                 <img 
-                  src="/attached_assets/logo.png" 
+                  src="@assets/logo.png" 
                   alt="Cloma Production" 
                   className="h-10 cursor-pointer"
                 />

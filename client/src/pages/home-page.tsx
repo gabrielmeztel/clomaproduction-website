@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ChatWidget from "@/components/chat/ChatWidget";
+import VideoPlayer from "@/components/VideoPlayer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
@@ -31,18 +32,17 @@ export default function HomePage() {
       <Navbar />
       
       {/* Hero Section */}
-      <div className="relative bg-white overflow-hidden">
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="@assets/hero-bg.jpg"
+            alt="Cloma Production Hero"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+        </div>
         <div className="max-w-7xl mx-auto">
-          <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <svg 
-              className="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2" 
-              fill="currentColor" 
-              viewBox="0 0 100 100" 
-              preserveAspectRatio="none" 
-              aria-hidden="true"
-            >
-              <polygon points="50,0 100,0 50,100 0,100" />
-            </svg>
+          <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
             <div className="pt-10 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="lg:grid lg:grid-cols-2 lg:gap-8">
@@ -84,13 +84,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-          <img 
-            className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" 
-            src="/attached_assets/hero-bg.jpg" 
-            alt="Cloma Production Animated Character" 
-          />
-        </div>
+        {/* Removing the duplicate hero image */}
       </div>
       
       {/* Services Section */}
