@@ -9,6 +9,15 @@ import { useQuery } from "@tanstack/react-query";
 import { BlogPost, GalleryImage } from "@shared/schema";
 import { useState } from "react";
 
+// Import assets
+import heroBgPath from "@assets/hero-bg.jpg";
+import logoPath from "@assets/logo.png";
+import partnerLogoPath from "@assets/partner-logo.jpg";
+import project1Path from "@assets/project1.jpg";
+import project2Path from "@assets/project2.jpg";
+import studioPath from "@assets/studio.jpg";
+import gopVideoPath from "@assets/gop_002.mp4";
+
 export default function HomePage() {
   const [email, setEmail] = useState("");
   
@@ -35,7 +44,7 @@ export default function HomePage() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="@assets/hero-bg.jpg"
+            src={heroBgPath}
             alt="Cloma Production Hero"
             className="w-full h-full object-cover"
           />
@@ -99,7 +108,7 @@ export default function HomePage() {
           <div className="mt-8 flex justify-center">
             <div className="relative w-full max-w-4xl overflow-hidden rounded-xl shadow-2xl">
               <VideoPlayer 
-                src="@assets/gop_002.mp4"
+                src={gopVideoPath}
                 className="w-full h-auto"
                 autoPlay={true}
                 loop={true}
@@ -183,7 +192,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row items-center gap-8">
                 <div className="flex-shrink-0">
                   <img 
-                    src="@assets/partner-logo.jpg" 
+                    src={partnerLogoPath} 
                     alt="AC Comic Studios Logo" 
                     className="h-32 w-32 object-cover rounded-full"
                   />
@@ -250,21 +259,21 @@ export default function HomePage() {
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div className="overflow-hidden rounded-lg shadow-lg">
               <img 
-                src="@assets/project1.jpg" 
+                src={project1Path} 
                 alt="Animation Project 1"
                 className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
               />
             </div>
             <div className="overflow-hidden rounded-lg shadow-lg">
               <img 
-                src="@assets/project2.jpg" 
+                src={project2Path} 
                 alt="Animation Project 2"
                 className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
               />
             </div>
             <div className="overflow-hidden rounded-lg shadow-lg">
               <img 
-                src="@assets/studio.jpg" 
+                src={studioPath} 
                 alt="Animation Project 3"
                 className="w-full h-64 object-cover transform transition duration-500 hover:scale-105"
               />
