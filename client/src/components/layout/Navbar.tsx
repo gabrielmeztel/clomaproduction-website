@@ -22,14 +22,17 @@ const Navbar = () => {
             <div className="flex-shrink-0 flex items-center">
               <Link href="/">
                 <span className="text-2xl font-heading font-bold text-primary cursor-pointer">
-                  EventConnect
+                  Cloma Production
                 </span>
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <NavLink href="/" label="Home" />
-              <NavLink href="/blogs" label="Blogs" />
-              <NavLink href="/gallery" label="Gallery" />
+              <NavLink href="/about" label="About" />
+              <NavLink href="/works" label="Works" />
+              <NavLink href="/fundraiser" label="Fundraiser" />
+              <NavLink href="/careers" label="Careers" />
+              <NavLink href="/contact" label="Contact" />
             </div>
           </div>
           
@@ -73,13 +76,28 @@ const Navbar = () => {
                     onClick={() => setIsMenuOpen(false)}
                   />
                   <MobileNavLink 
-                    href="/blogs"
-                    label="Blogs"
+                    href="/about"
+                    label="About"
                     onClick={() => setIsMenuOpen(false)}
                   />
                   <MobileNavLink 
-                    href="/gallery"
-                    label="Gallery"
+                    href="/works"
+                    label="Works"
+                    onClick={() => setIsMenuOpen(false)}
+                  />
+                  <MobileNavLink 
+                    href="/fundraiser"
+                    label="Fundraiser"
+                    onClick={() => setIsMenuOpen(false)}
+                  />
+                  <MobileNavLink 
+                    href="/careers"
+                    label="Careers"
+                    onClick={() => setIsMenuOpen(false)}
+                  />
+                  <MobileNavLink 
+                    href="/contact"
+                    label="Contact"
                     onClick={() => setIsMenuOpen(false)}
                   />
                   <div className="pt-4 pb-3 border-t border-gray-200">
@@ -118,14 +136,12 @@ const NavLink = ({ href, label }: { href: string; label: string }) => {
   const isActive = location === href;
   
   return (
-    <Link href={href}>
-      <a className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-        isActive
-        ? "border-primary text-gray-900"
-        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-      }`}>
-        {label}
-      </a>
+    <Link href={href} className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+      isActive
+      ? "border-primary text-gray-900"
+      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+    }`}>
+      {label}
     </Link>
   );
 };
@@ -143,17 +159,16 @@ const MobileNavLink = ({
   const isActive = location === href;
   
   return (
-    <Link href={href}>
-      <a 
-        className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
-          isActive
-            ? "bg-primary/10 border-primary text-primary"
-            : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-        }`}
-        onClick={onClick}
-      >
-        {label}
-      </a>
+    <Link 
+      href={href} 
+      className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+        isActive
+          ? "bg-primary/10 border-primary text-primary"
+          : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
+      }`}
+      onClick={onClick}
+    >
+      {label}
     </Link>
   );
 };

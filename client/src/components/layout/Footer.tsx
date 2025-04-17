@@ -12,8 +12,8 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-bold text-white font-heading">EventConnect</h3>
-            <p className="mt-2 text-gray-300">Connecting event attendees with shared interests.</p>
+            <h3 className="text-2xl font-bold text-white font-heading">Cloma Production</h3>
+            <p className="mt-2 text-gray-300">Bringing Stories to Life through Animation</p>
             <div className="mt-4 flex space-x-6">
               <SocialLink href="#" icon={<FacebookIcon className="h-5 w-5" />} />
               <SocialLink href="#" icon={<TwitterIcon className="h-5 w-5" />} />
@@ -64,8 +64,8 @@ const SocialLink = ({ href, icon }: { href: string; icon: React.ReactNode }) => 
 const FooterLink = ({ href, label }: { href: string; label: string }) => {
   return (
     <li>
-      <Link href={href}>
-        <a className="text-base text-gray-300 hover:text-white">{label}</a>
+      <Link href={href} className="text-base text-gray-300 hover:text-white">
+        {label}
       </Link>
     </li>
   );
