@@ -15,15 +15,17 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-black shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
               <Link href="/">
-                <span className="text-2xl font-heading font-bold text-primary cursor-pointer">
-                  Cloma Production
-                </span>
+                <img 
+                  src="/attached_assets/logo.png" 
+                  alt="Cloma Production" 
+                  className="h-10 cursor-pointer"
+                />
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -46,7 +48,7 @@ const Navbar = () => {
                   Admin Dashboard
                 </Button>
               ) : (
-                <span className="text-gray-700 mr-2">
+                <span className="text-white mr-2">
                   Welcome, {user.username}
                 </span>
               )
@@ -63,7 +65,7 @@ const Navbar = () => {
           <div className="flex items-center sm:hidden">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-gray-500">
+                <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Open main menu</span>
                 </Button>
@@ -138,8 +140,8 @@ const NavLink = ({ href, label }: { href: string; label: string }) => {
   return (
     <Link href={href} className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
       isActive
-      ? "border-primary text-gray-900"
-      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+      ? "border-primary text-white"
+      : "border-transparent text-gray-400 hover:border-gray-500 hover:text-white"
     }`}>
       {label}
     </Link>
