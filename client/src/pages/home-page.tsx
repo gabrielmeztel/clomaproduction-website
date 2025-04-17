@@ -129,6 +129,23 @@ export default function HomePage() {
         </div>
       </div>
       
+      {/* Fundraiser Banner */}
+      <div className="py-16 bg-primary">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-white sm:text-4xl font-heading">Fundraiser</h2>
+          <p className="mt-4 text-xl text-white/90 max-w-2xl mx-auto">
+            Coming Soon! Stay tuned for our upcoming animation project fundraising campaign.
+          </p>
+          <div className="mt-6">
+            <Link href="/fundraiser">
+              <Button className="bg-white text-primary hover:bg-gray-100 font-semibold">
+                Learn More
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+      
       {/* Partners Section */}
       <div className="py-12 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

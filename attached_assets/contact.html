@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact Us | Cloma Production</title>
   <link rel="stylesheet" href="assets/css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -14,7 +13,6 @@
         <img src="assets/images/logo.png" alt="Cloma Production">
       </div>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="works.html">Works</a></li>
         <li><a href="fundraiser.html">Fundraiser</a></li>
@@ -27,124 +25,20 @@
   <section class="contact">
     <div class="container">
       <h2>Contact Us</h2>
-      <p class="section-intro">Have a question or interested in working with us? Fill out the form below and we'll get back to you as soon as possible.</p>
-      
-      <div class="contact-container">
-        <div class="contact-form">
-          <form action="#" method="POST" id="contactForm">
-            <div class="form-group">
-              <label for="name">Name:</label>
-              <input type="text" id="name" name="name" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="email">Email:</label>
-              <input type="email" id="email" name="email" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="subject">Subject:</label>
-              <select id="subject" name="subject">
-                <option value="general">General Inquiry</option>
-                <option value="project">Project Collaboration</option>
-                <option value="career">Career Opportunities</option>
-                <option value="support">Support Our Projects</option>
-              </select>
-            </div>
-            
-            <div class="form-group">
-              <label for="message">Message:</label>
-              <textarea id="message" name="message" rows="6" required></textarea>
-            </div>
-            
-            <button type="submit" class="btn btn-large">Send Message</button>
-          </form>
-        </div>
+      <form action="#" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
         
-        <div class="contact-info">
-          <h3>Get in Touch</h3>
-          
-          <div class="info-item">
-            <div class="info-icon">📧</div>
-            <div class="info-content">
-              <h4>Email</h4>
-              <p><a href="mailto:clomaprodution@gmail.com">clomaprodution@gmail.com</a></p>
-            </div>
-          </div>
-          
-          <div class="info-item">
-            <div class="info-icon">📱</div>
-            <div class="info-content">
-              <h4>Phone</h4>
-              <p>+2349129426172</p>
-            </div>
-          </div>
-          
-          <div class="info-item">
-            <div class="info-icon">🌐</div>
-            <div class="info-content">
-              <h4>Social Media</h4>
-              <div class="social-links">
-                <a href="https://twitter.com" target="_blank" class="social-icon">Twitter</a>
-                <a href="https://instagram.com" target="_blank" class="social-icon">Instagram</a>
-                <a href="https://youtube.com" target="_blank" class="social-icon">YouTube</a>
-              </div>
-            </div>
-          </div>
-          
-          <div class="business-hours">
-            <h4>Business Hours</h4>
-            <p>Monday - Friday: 9am - 6pm WAT</p>
-            <p>We typically respond to inquiries within 48 hours.</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="faq-section">
-        <h3>Frequently Asked Questions</h3>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
         
-        <div class="faq-item">
-          <h4>How do you coordinate work across different time zones?</h4>
-          <p>As a fully remote studio with team members worldwide, we've developed efficient asynchronous workflows while ensuring regular overlapping hours for collaboration and reviews. We work with clients from all regions and can adapt to their time zones for meetings and project coordination.</p>
-        </div>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
         
-        <div class="faq-item">
-          <h4>What information should I include when inquiring about a project?</h4>
-          <p>It's helpful to include your project timeline, budget range, style references, and a brief description of your vision.</p>
-        </div>
-        
-        <div class="faq-item">
-          <h4>How do you handle project revisions?</h4>
-          <p>We include a set number of revision rounds in our project quotes. Additional revisions can be accommodated at an agreed-upon rate.</p>
-        </div>
-      </div>
+        <button type="submit" class="btn">Send Message</button>
+      </form>
     </div>
   </section>
-
-  <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <img src="assets/images/logo.png" alt="Cloma Production">
-        </div>
-        <div class="footer-links">
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="works.html">Works</a></li>
-            <li><a href="fundraiser.html">Fundraiser</a></li>
-            <li><a href="careers.html">Careers</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-contact">
-          <p>Contact: <a href="mailto:clomaprodution@gmail.com">clomaprodution@gmail.com</a></p>
-          <p>Phone: +2349129426172</p>
-        </div>
-      </div>
-      <p class="copyright">&copy; 2025 Cloma Production. All rights reserved.</p>
-    </div>
-  </footer>
 
   <script src="assets/js/main.js"></script>
 </body>
